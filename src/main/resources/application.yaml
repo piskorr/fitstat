@@ -1,0 +1,17 @@
+spring:
+
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/fitstat
+    username: kanciapauser
+    password: Kanciapauser123
+  main:
+    banner-mode: off
+
+server:
+  port: 8081
