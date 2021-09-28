@@ -1,17 +1,23 @@
 spring:
 
-
   jpa:
     hibernate:
       ddl-auto: validate
-
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
   datasource:
     url: jdbc:mysql://localhost:3306/fitstat
     username: root
     password: root
-  main:
-    banner-mode: off
 
 server:
-  port: 8081
+  port: 8080
+
+jwt:
+  clientId: fitstat-client-id
+  client-secret: secret
+  accessTokenValidititySeconds: 100
+  refreshTokenValiditySeconds: 1000
+
+
+

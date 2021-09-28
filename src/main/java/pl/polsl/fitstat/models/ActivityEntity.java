@@ -3,7 +3,7 @@ package pl.polsl.fitstat.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ActivityEntity")
+@Table(name = "activities")
 public class ActivityEntity {
 
     @Id

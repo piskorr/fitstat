@@ -13,7 +13,10 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "pass")
+    @Column(name = "user_name")
+    private String username;
+
+    @Column(name = "user_password")
     private String password;
 
     @Column(name = "first_name")
@@ -34,25 +37,27 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String email, String password, String firstName, String lastName, Float height, Float weight, boolean isDeleted) {
+    public UserEntity(Long id, String email, String username, String password, String firstName, String lastName, Float height, Float weight) {
         this.id = id;
         this.email = email;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.height = height;
         this.weight = weight;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
     }
 
-    public UserEntity(String email, String password, String firstName, String lastName, Float height, Float weight, boolean isDeleted) {
+    public UserEntity(String email, String username, String password, String firstName, String lastName, Float height, Float weight) {
         this.email = email;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.height = height;
         this.weight = weight;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
     }
 
     public Long getId() {
@@ -65,6 +70,14 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

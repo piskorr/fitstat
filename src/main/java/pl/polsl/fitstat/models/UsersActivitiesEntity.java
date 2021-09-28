@@ -1,7 +1,6 @@
 package pl.polsl.fitstat.models;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,12 +15,12 @@ public class UsersActivitiesEntity {
     private LocalDateTime activityDate;
 
     @Column(name = "activity_duration")
-    private Time activityDuration;
+    private Integer activityDuration;
 
     public UsersActivitiesEntity() {
     }
 
-    public UsersActivitiesEntity(Long id, LocalDateTime activityDate, Time activityDuration) {
+    public UsersActivitiesEntity(Long id, LocalDateTime activityDate, Integer activityDuration) {
         this.id = id;
         this.activityDate = activityDate;
         this.activityDuration = activityDuration;
@@ -31,7 +30,7 @@ public class UsersActivitiesEntity {
         this.activityDate = activityDate;
     }
 
-    public void setActivityDuration(Time activityDuration) {
+    public void setActivityDuration(Integer activityDuration) {
         this.activityDuration = activityDuration;
     }
 
@@ -43,7 +42,7 @@ public class UsersActivitiesEntity {
         return activityDate;
     }
 
-    public Time getActivityDuration() {
+    public Integer getActivityDuration() {
         return activityDuration;
     }
 }
