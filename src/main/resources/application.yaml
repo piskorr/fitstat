@@ -7,17 +7,13 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/fitstat
-    username: root
-    password: root
+    username: kanciapauser
+    password: Kanciapauser123
+
 
 server:
-  port: 8080
+  port: 8090
 
-jwt:
-  clientId: fitstat-client-id
-  client-secret: secret
-  accessTokenValidititySeconds: 100
-  refreshTokenValiditySeconds: 1000
 
 
 

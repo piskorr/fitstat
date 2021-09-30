@@ -14,29 +14,13 @@ import pl.polsl.fitstat.repositories.UserRepository;
 import java.util.Arrays;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository ) {
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = repository.findByUsername(username)
-                .orElseThrow(RuntimeException::new);
-
-        GrantedAuthority authority = new SimpleGrantedAuthority("USER");
-        User u = new User(user.getEmail(), user.getPassword(), Arrays.asList(authority));
-        return u;
 
     }
 
-    public UserEntity register(String email, String password) {
-        UserEntity userEntity = new UserEntity(email, "username", passwordEncoder.encode(password), "firstName", "lastName", null, null);
-        return repository.save(userEntity);
-    }
 }
