@@ -7,13 +7,17 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/fitstat
-    username: kanciapauser
-    password: Kanciapauser123
+    username: root
+    password: root
 
 
 server:
   port: 8090
 
-
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: fitstat-realm
+  resource: fitstat-app
+  public-client: true
 
 
