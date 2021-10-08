@@ -10,6 +10,11 @@ spring:
     username: kanciapauser
     password: Kanciapauser123
 
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: fitstat-realm
+  resource: login-app
+  public-client: true
 
 server:
   port: 8090
