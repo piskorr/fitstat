@@ -1,6 +1,9 @@
 package pl.polsl.fitstat.models;
 
+import pl.polsl.fitstat.dtos.UserDTO;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -31,13 +34,23 @@ public class UserEntity {
     @Column(name = "weight")
     private Float weight;
 
+    @Column(name = "dob")
+    private LocalDate dob;
+
+    @Column(name = "sex")
+    private boolean sex;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
+    @ManyToOne
+    @JoinColumn(name = "role")
+    private RoleEntity role;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String email, String username, String password, String firstName, String lastName, Float height, Float weight) {
+    public UserEntity(Long id, String email, String username, String password, String firstName, String lastName, Float height, Float weight, LocalDate dob, boolean sex) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -46,10 +59,12 @@ public class UserEntity {
         this.lastName = lastName;
         this.height = height;
         this.weight = weight;
+        this.dob = dob;
+        this.sex = sex;
         this.isDeleted = false;
     }
 
-    public UserEntity(String email, String username, String password, String firstName, String lastName, Float height, Float weight) {
+    public UserEntity(String email, String username, String password, String firstName, String lastName, Float height, Float weight, LocalDate dob, boolean sex) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -57,7 +72,29 @@ public class UserEntity {
         this.lastName = lastName;
         this.height = height;
         this.weight = weight;
+        this.dob = dob;
+        this.sex = sex;
         this.isDeleted = false;
+    }
+
+    public UserEntity(UserDTO userDTO) {
+
+    }
+
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    public String getSex() {
+        return sex ? "female" : "male";
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
+    public void setSex(boolean sex) {
+        this.sex = sex;
     }
 
     public Long getId() {

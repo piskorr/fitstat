@@ -11,10 +11,11 @@ spring:
     password: root
 
 keycloak:
-  auth-server-url: http://localhost:8080/auth
   realm: fitstat-realm
-  resource: login-app
-  public-client: true
+  resource: admin-fitstat
+  auth-server-url: http://localhost:8080/auth
+  credentials:
+    secret: d61c8256-aed4-4faf-b17a-711904359eb4
 
 server:
   port: 8090

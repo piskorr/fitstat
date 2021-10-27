@@ -1,28 +1,36 @@
 package pl.polsl.fitstat.controllers;
 
+import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pl.polsl.fitstat.security.KeycloakService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import pl.polsl.fitstat.dtos.UserDTO;
 import pl.polsl.fitstat.services.UserService;
 
+import javax.ws.rs.core.Response;
+import java.util.List;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/public/users")
 public class UserController {
 
     private final UserService userService;
-    private final KeycloakService keycloakService;
 
-    public UserController(UserService userService, KeycloakService keycloakService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.keycloakService = keycloakService;
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<?> test(){
-
-        keycloakService.createUser();
-        return null;
+    @GetMapping("/res")
+    @PreAuthorize("hasRole('USER')")
+    public String test1() {
+        return "user string";
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> create(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userDTO));
+    }
+
+
 }
