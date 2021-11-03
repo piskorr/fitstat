@@ -2,13 +2,17 @@ package pl.polsl.fitstat.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import pl.polsl.fitstat.errors.CredentialsTakenException;
 import pl.polsl.fitstat.errors.ResourceNotFoundException;
 
-import javax.mail.MessagingException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -36,6 +40,23 @@ public class ExceptionController {
     @ExceptionHandler(NotAuthorizedException.class)
     ResponseEntity<Object> handlerNotAuthorizedException(NotAuthorizedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(CredentialsTakenException.class)
+    ResponseEntity<Object> handlerCredentialsTakenException(CredentialsTakenException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
 }

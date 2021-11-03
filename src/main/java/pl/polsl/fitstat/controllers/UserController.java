@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.polsl.fitstat.dtos.UserDTO;
 import pl.polsl.fitstat.services.UserService;
 
+import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -21,15 +22,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/res")
+    @GetMapping("/profile")
     @PreAuthorize("hasRole('USER')")
-    public String test1() {
-        return "user string";
+    public UserDTO getUsersProfile() {
+        return new UserDTO(userService.getCurrentUser());
+    }
+
+    @PostMapping("/profile/password")
+    public UserDTO changeUsersPassword() {
+        return new UserDTO(userService.getCurrentUser());
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> create(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(id));
     }
 
 

@@ -21,7 +21,7 @@ class RoleService {
         this.keycloak = keycloak;
     }
 
-    public RoleEntity findRoleByName(String name) {
+    public RoleEntity getRoleByName(String name) {
         return roleRepository.findByRole(name).orElseThrow(() -> new ResourceNotFoundException("Role doesnt exist!"));
     }
 

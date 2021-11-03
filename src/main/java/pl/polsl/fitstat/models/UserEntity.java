@@ -38,7 +38,7 @@ public class UserEntity {
     private LocalDate dob;
 
     @Column(name = "sex")
-    private boolean sex;
+    private Boolean sex;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
@@ -78,7 +78,16 @@ public class UserEntity {
     }
 
     public UserEntity(UserDTO userDTO) {
-
+        this.email = userDTO.getEmail();
+        this.username = userDTO.getUsername();
+        this.password = userDTO.getPassword();
+        this.firstName = userDTO.getFirstName();
+        this.lastName = userDTO.getLastName();
+        this.height = userDTO.getHeight();
+        this.weight = userDTO.getWeight();
+        this.dob = userDTO.getDob();
+        this.sex = userDTO.getSex() != null ? userDTO.getSex().equals("female") : null;
+        this.isDeleted = false;
     }
 
     public LocalDate getDob() {
@@ -163,5 +172,13 @@ public class UserEntity {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public RoleEntity getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 }

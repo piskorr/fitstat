@@ -55,6 +55,15 @@ public class KeycloakService {
                 .get(userId);
     }
 
+    public void removeUserResource(String userId) {
+        keycloak
+                .getInstance()
+                .realm(keycloak.getRealm())
+                .users()
+                .get(userId)
+                .remove();
+    }
+
     public void createUser(UserDTO userModel) {
         CredentialRepresentation password = preparePasswordRepresentation(userModel.getPassword());
         UserRepresentation user = prepareUserRepresentation(userModel, password);
@@ -87,15 +96,15 @@ public class KeycloakService {
                         .getInstance()
                         .realm(keycloak.getRealm())
                         .roles()
-                        .get(user.getRole())
+                        .get("ROLE_" + user.getRole())
                         .toRepresentation());
     }
 
     public void assignUserRole(UserDTO user) {
         List<RoleRepresentation> role = prepareRoleRepresentation(user);
         String userId = getUserIdByUsername(user.getUsername());
-        UserResource usersResourceToAddRole = getUserResource(userId);
-        usersResourceToAddRole.roles().realmLevel().add(role);
+        UserResource userResource = getUserResource(userId);
+        userResource.roles().realmLevel().add(role);
     }
 
     public void disableUser(String username) {
@@ -104,6 +113,11 @@ public class KeycloakService {
         UserRepresentation updatedUser = userResource.toRepresentation();
         updatedUser.setEnabled(false);
         userResource.update(updatedUser);
+    }
+
+    public void removeUser(String username) {
+        String userId = getUserIdByUsername(username);
+        removeUserResource(userId);
     }
 
 
