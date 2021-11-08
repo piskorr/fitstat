@@ -15,8 +15,9 @@ keycloak:
   resource: admin-fitstat
   auth-server-url: http://localhost:8080/auth
   credentials:
-    secret: 7e6ec7ff-13a2-48c4-8807-d7f3472bc921
-    #d61c8256-aed4-4faf-b17a-711904359eb4
+    secret: d61c8256-aed4-4faf-b17a-711904359eb4
+    #secret: 7e6ec7ff-13a2-48c4-8807-d7f3472bc921
+
 
 server:
   port: 8090

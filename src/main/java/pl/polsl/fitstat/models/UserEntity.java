@@ -1,9 +1,12 @@
 package pl.polsl.fitstat.models;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import pl.polsl.fitstat.dtos.UserDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -43,9 +46,26 @@ public class UserEntity {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
+    Set<UsersActivityEntity> usersActivities;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
+    Set<UsersChallengeEntity> usersChallenges;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
+    Set<PlannedActivityEntity> plannedActivities;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
+    Set<UsersRecordEntity> usersRecords;
+
     @ManyToOne
     @JoinColumn(name = "role")
     private RoleEntity role;
+
 
     public UserEntity() {
     }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users_activities")
-public class UsersActivitiesEntity {
+public class UsersActivityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +17,18 @@ public class UsersActivitiesEntity {
     @Column(name = "activity_duration")
     private Integer activityDuration;
 
-    public UsersActivitiesEntity() {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private ActivityEntity activityEntity;
+
+    public UsersActivityEntity() {
     }
 
-    public UsersActivitiesEntity(Long id, LocalDateTime activityDate, Integer activityDuration) {
+    public UsersActivityEntity(Long id, LocalDateTime activityDate, Integer activityDuration) {
         this.id = id;
         this.activityDate = activityDate;
         this.activityDuration = activityDuration;

@@ -1,6 +1,10 @@
 package pl.polsl.fitstat.models;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "activities")
@@ -21,6 +25,18 @@ public class ActivityEntity {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
+    Set<UsersActivityEntity> usersActivities;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
+    Set<PlannedActivityEntity> plannedActivities;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
+    Set<UsersRecordEntity> usersRecords;
 
     public ActivityEntity() {
     }
