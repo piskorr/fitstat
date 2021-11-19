@@ -26,8 +26,9 @@ public class UserController {
     }
 
     @PostMapping("/profile/password")
-    public UserDTO changeUsersPassword() {
-        return new UserDTO(userService.getCurrentUser());
+    public ResponseEntity<?> changeUsersPassword(@RequestBody String new_password) {
+        userService.changePassword(new_password);
+        return ResponseEntity.status(HttpStatus.OK).body("done");
     }
 
     @PostMapping("/register")
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable Long id){
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(id));
     }
 

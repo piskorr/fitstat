@@ -2,6 +2,7 @@ package pl.polsl.fitstat.models;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import pl.polsl.fitstat.dtos.ActivityDTO;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -56,6 +57,10 @@ public class ActivityEntity {
         this.isDeleted = isDeleted;
     }
 
+    public ActivityEntity(ActivityDTO activityDTO) {
+
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -88,7 +93,7 @@ public class ActivityEntity {
         return caloriesConsumption;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 }

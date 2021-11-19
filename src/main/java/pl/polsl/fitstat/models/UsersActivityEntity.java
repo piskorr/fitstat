@@ -17,6 +17,9 @@ public class UsersActivityEntity {
     @Column(name = "activity_duration")
     private Integer activityDuration;
 
+    @Column(name = "calories_burned")
+    private Integer caloriesBurned;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
@@ -28,10 +31,11 @@ public class UsersActivityEntity {
     public UsersActivityEntity() {
     }
 
-    public UsersActivityEntity(Long id, LocalDateTime activityDate, Integer activityDuration) {
+    public UsersActivityEntity(Long id, LocalDateTime activityDate, Integer activityDuration, Integer caloriesBurned) {
         this.id = id;
         this.activityDate = activityDate;
         this.activityDuration = activityDuration;
+        this.caloriesBurned = caloriesBurned;
     }
 
     public void setActivityDate(LocalDateTime activityDate) {
@@ -52,5 +56,14 @@ public class UsersActivityEntity {
 
     public Integer getActivityDuration() {
         return activityDuration;
+    }
+
+
+    public Integer getCaloriesBurned() {
+        return caloriesBurned;
+    }
+
+    public void setCaloriesBurned(Integer caloriesBurned) {
+        this.caloriesBurned = caloriesBurned;
     }
 }
