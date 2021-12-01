@@ -12,11 +12,14 @@ public class UsersChallengeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "is_completed")
-    private Boolean isCompleted;
-
     @Column(name = "date")
     private LocalDate date;
+
+    @Column(name = "total_time")
+    private Integer totalTime;
+
+    @Column(name = "is_completed")
+    private Boolean isCompleted;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -32,11 +35,20 @@ public class UsersChallengeEntity {
     public UsersChallengeEntity() {
     }
 
+    public UsersChallengeEntity(ChallengeEntity challengeEntity, UserEntity userEntity) {
+        this.date = LocalDate.now();
+        this.totalTime = 0;
+        this.isCompleted = false;
+        this.isDeleted = false;
+        this.challengeEntity = challengeEntity;
+        this.userEntity = userEntity;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public Boolean getCompleted() {
+    public Boolean isCompleted() {
         return isCompleted;
     }
 
@@ -44,7 +56,7 @@ public class UsersChallengeEntity {
         return date;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 
@@ -74,5 +86,13 @@ public class UsersChallengeEntity {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
+    }
+
+    public Integer getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(Integer totalTime) {
+        this.totalTime = totalTime;
     }
 }

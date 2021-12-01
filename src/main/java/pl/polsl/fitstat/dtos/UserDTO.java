@@ -2,9 +2,7 @@ package pl.polsl.fitstat.dtos;
 
 import pl.polsl.fitstat.models.UserEntity;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class UserDTO {
@@ -35,6 +33,9 @@ public class UserDTO {
 
     private String sex;
 
+    @NotNull(message = "weight cannot be empty")
+    @Min(value = 1)
+    @Max(value = 300)
     private Float weight;
 
     private Float height;
@@ -51,11 +52,11 @@ public class UserDTO {
     public UserDTO(UserEntity userEntity) {
         this.id = userEntity.getId();
         this.username = userEntity.getUsername();
-        this.password = userEntity.getPassword();
         this.role = userEntity.getRole().getRole();
         this.email = userEntity.getEmail();
         this.firstName = userEntity.getFirstName();
         this.lastName = userEntity.getLastName();
+        this.weight = userEntity.getWeight();
     }
 
     public Long getId() {

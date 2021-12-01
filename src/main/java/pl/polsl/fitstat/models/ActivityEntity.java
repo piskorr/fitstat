@@ -21,15 +21,15 @@ public class ActivityEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "calories_consumption")
-    private Integer caloriesConsumption;
+    @Column(name = "MET")
+    private Double MET;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
-    Set<UsersActivityEntity> usersActivities;
+    Set<ActivityEntryEntity> usersActivities;
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
@@ -37,28 +37,35 @@ public class ActivityEntity {
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
-    Set<UsersRecordEntity> usersRecords;
+    Set<RecordLogEntity> usersRecords;
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activityEntity")
+    Set<ChallengeEntity> challengeActivities;
 
     public ActivityEntity() {
     }
 
-    public ActivityEntity(String name, String description, Integer caloriesConsumption, Boolean isDeleted) {
+    public ActivityEntity(String name, String description, Double MET, Boolean isDeleted) {
         this.name = name;
         this.description = description;
-        this.caloriesConsumption = caloriesConsumption;
+        this.MET = MET;
         this.isDeleted = isDeleted;
     }
 
-    public ActivityEntity(Long id, String name, String description, Integer caloriesConsumption, Boolean isDeleted) {
+    public ActivityEntity(Long id, String name, String description, Double MET, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.caloriesConsumption = caloriesConsumption;
+        this.MET = MET;
         this.isDeleted = isDeleted;
     }
 
     public ActivityEntity(ActivityDTO activityDTO) {
-
+        this.name = activityDTO.getName();
+        this.description = activityDTO.getDescription();
+        this.MET = activityDTO.getMET();
+        this.isDeleted = false;
     }
 
     public void setName(String name) {
@@ -69,8 +76,8 @@ public class ActivityEntity {
         this.description = description;
     }
 
-    public void setCaloriesConsumption(Integer caloriesConsumption) {
-        this.caloriesConsumption = caloriesConsumption;
+    public void setMET(Double caloriesConsumption) {
+        this.MET = caloriesConsumption;
     }
 
     public void setDeleted(Boolean deleted) {
@@ -89,8 +96,8 @@ public class ActivityEntity {
         return description;
     }
 
-    public Integer getCaloriesConsumption() {
-        return caloriesConsumption;
+    public Double getMET() {
+        return MET;
     }
 
     public Boolean isDeleted() {

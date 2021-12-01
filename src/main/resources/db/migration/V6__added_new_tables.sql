@@ -1,7 +1,9 @@
 create table if not exists challenges
 (
     id          bigint primary key auto_increment,
-    description varchar(250)
+    description varchar(250),
+    activity_id bigint,
+    foreign key (activity_id) references activities (id)
 );
 
 create table if not exists users_challenges

@@ -1,0 +1,1 @@
+alter table weight_history add column weight double;

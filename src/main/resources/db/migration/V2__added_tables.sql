@@ -3,7 +3,7 @@ create table if not exists activities
     id                   bigint primary key auto_increment,
     name                 varchar(40),
     description          varchar(255),
-    calories_consumption int,
+    calories_consumption double,
     is_deleted           bit
 );
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pl.polsl.fitstat.errors.CredentialsTakenException;
+import pl.polsl.fitstat.errors.ResourceAlreadyExistException;
 import pl.polsl.fitstat.errors.ResourceNotFoundException;
 
 import javax.ws.rs.ForbiddenException;
@@ -29,6 +30,11 @@ public class ExceptionController {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseEntity<Object> handlerResourceNotFound(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistException.class)
+    ResponseEntity<Object> handlerResourceAlreadyExistFound(ResourceAlreadyExistException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 

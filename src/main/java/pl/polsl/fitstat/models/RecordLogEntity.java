@@ -1,11 +1,13 @@
 package pl.polsl.fitstat.models;
 
+import pl.polsl.fitstat.dtos.RecordDTO;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Table(name = "users_records")
+@Table(name = "record_logs")
 @Entity
-public class UsersRecordEntity {
+public class RecordLogEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +20,18 @@ public class UsersRecordEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @Column(name = "is_historic")
+    private Boolean isHistoric;
+
+    @Column(name = "reps")
+    private Integer reps;
+
+    @Column(name = "time")
+    private Integer time;
+
+    @Column(name = "distance")
+    private Double distance;
+
     @ManyToOne
     @JoinColumn(name = "activity_id")
     private ActivityEntity activityEntity;
@@ -26,14 +40,18 @@ public class UsersRecordEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    public UsersRecordEntity() {
+    public RecordLogEntity() {
+    }
+
+    public RecordLogEntity(RecordDTO recordDTO, ActivityEntity activity, UserEntity currentUser) {
+
     }
 
     public LocalDate getRecordDate() {
         return recordDate;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 
@@ -67,5 +85,37 @@ public class UsersRecordEntity {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
+    }
+
+    public Boolean isHistoric() {
+        return isHistoric;
+    }
+
+    public void setHistoric(Boolean historic) {
+        isHistoric = historic;
+    }
+
+    public Integer getReps() {
+        return reps;
+    }
+
+    public void setReps(Integer reps) {
+        this.reps = reps;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }

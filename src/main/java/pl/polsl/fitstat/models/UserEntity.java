@@ -22,8 +22,8 @@ public class UserEntity {
     @Column(name = "user_name")
     private String username;
 
-    @Column(name = "user_password")
-    private String password;
+//    @Column(name = "user_password")
+//    private String password;
 
     @Column(name = "first_name")
     private String firstName;
@@ -48,7 +48,7 @@ public class UserEntity {
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
-    Set<UsersActivityEntity> usersActivities;
+    Set<ActivityEntryEntity> usersActivities;
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
@@ -60,7 +60,7 @@ public class UserEntity {
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
-    Set<UsersRecordEntity> usersRecords;
+    Set<RecordLogEntity> usersRecords;
 
     @ManyToOne
     @JoinColumn(name = "role")
@@ -74,7 +74,7 @@ public class UserEntity {
         this.id = id;
         this.email = email;
         this.username = username;
-        this.password = password;
+        //this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.height = height;
@@ -87,7 +87,7 @@ public class UserEntity {
     public UserEntity(String email, String username, String password, String firstName, String lastName, Float height, Float weight, LocalDate dob, boolean sex) {
         this.email = email;
         this.username = username;
-        this.password = password;
+        //this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.height = height;
@@ -100,7 +100,7 @@ public class UserEntity {
     public UserEntity(UserDTO userDTO) {
         this.email = userDTO.getEmail();
         this.username = userDTO.getUsername();
-        this.password = userDTO.getPassword();
+        //this.password = userDTO.getPassword();
         this.firstName = userDTO.getFirstName();
         this.lastName = userDTO.getLastName();
         this.height = userDTO.getHeight();
@@ -145,14 +145,14 @@ public class UserEntity {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     public String getFirstName() {
         return firstName;

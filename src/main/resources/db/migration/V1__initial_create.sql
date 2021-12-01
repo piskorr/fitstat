@@ -4,7 +4,6 @@ create table if not exists users
     id            bigint primary key auto_increment,
     email         varchar(40)  not null,
     user_name     varchar(30)  not null,
-    user_password varchar(255) not null,
     first_name    varchar(40),
     last_name     varchar(40),
     dob           date,

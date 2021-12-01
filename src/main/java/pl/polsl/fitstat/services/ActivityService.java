@@ -8,6 +8,7 @@ import pl.polsl.fitstat.models.ActivityEntity;
 import pl.polsl.fitstat.repositories.ActivityRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,22 +48,38 @@ public class ActivityService {
     }
 
     public ActivityDTO addNewActivity(ActivityDTO activityDTO) {
-        repository.findByName(activityDTO.getName())
-                .orElseThrow(() -> new ResourceAlreadyExistException("Activity with name: " + activityDTO.getName() + " already exists!"));
+        Optional<ActivityEntity> activity = repository.findByName(activityDTO.getName());
+         if(activity.isPresent())
+             throw new ResourceAlreadyExistException("Activity with name: " + activityDTO.getName() + " already exists!");
 
         ActivityEntity newActivity = new ActivityEntity(activityDTO);
         repository.save(newActivity);
         return new ActivityDTO(newActivity);
     }
 
-    public ActivityDTO updateActivityById(ActivityDTO activityDTO) {
-        ActivityEntity activity = getActivityById(activityDTO.getId());
+    public ActivityDTO updateActivityById(long id, ActivityDTO activityDTO) {
+        ActivityEntity activity = getActivityById(id);
+        updateActivity(activity, activityDTO);
+        repository.save(activity);
+        return new ActivityDTO(activity);
+    }
 
-        updateActivity()
+    private void updateActivity(ActivityEntity activityEntity, ActivityDTO activityDTO) {
+        if(activityDTO.getName() != null)
+            activityEntity.setName(activityDTO.getName());
 
+        if(activityDTO.getMET() != null)
+            activityEntity.setMET(activityDTO.getMET());
 
+        if(activityDTO.getDescription() != null)
+            activityEntity.setDescription(activityDTO.getDescription());
+    }
 
-
+    public ActivityDTO deleteActivityById(long activityId){
+        ActivityEntity activity = getActivityById(activityId);
+        activity.setDeleted(true);
+        repository.save(activity);
+        return new ActivityDTO(activity);
     }
 
 }

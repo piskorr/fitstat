@@ -1,6 +1,8 @@
 package pl.polsl.fitstat.models;
 
 
+import pl.polsl.fitstat.dtos.WeightEntryDTO;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -11,6 +13,9 @@ public class WeightHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "weight")
+    private Double weight;
 
     @Column(name = "date")
     private LocalDate date;
@@ -25,6 +30,18 @@ public class WeightHistoryEntity {
     public WeightHistoryEntity() {
     }
 
+    public WeightHistoryEntity(UserEntity userEntity) {
+        this.weight = userEntity.getWeight().doubleValue();
+        this.userEntity = userEntity;
+        this.date = LocalDate.now();
+        this.isDeleted = false;
+    }
+
+    public WeightHistoryEntity(WeightEntryDTO weightEntryDTO, UserEntity user) {
+
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -33,7 +50,7 @@ public class WeightHistoryEntity {
         return date;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 
@@ -51,5 +68,14 @@ public class WeightHistoryEntity {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
+    }
+
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 }
