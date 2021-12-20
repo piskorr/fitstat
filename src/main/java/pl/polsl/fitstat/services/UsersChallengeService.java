@@ -48,14 +48,16 @@ public class UsersChallengeService {
     }
 
     public UsersChallengeDTO getUsersChallengeByIdAndMap(long usersChallengeId) {
-        return new UsersChallengeDTO(getUsersChallengeById(usersChallengeId));
+        UsersChallengeEntity usersChallenge = getUsersChallengeById(usersChallengeId);
+        userService.checkRightsToResource(usersChallenge.getUserEntity().getId());
+        return new UsersChallengeDTO(usersChallenge);
     }
 
     public List<UsersChallengeDTO> getCurrentUsersChallenges() {
         return repository.findAllByUserEntity_Id(userService.getCurrentUser().getId())
                 .stream()
                 .filter(usersChallengeEntity -> !usersChallengeEntity.isDeleted())
-                .map(UsersChallengeDTO::new)
+                .map(usersChallenge -> new UsersChallengeDTO(usersChallenge, usersChallenge.getChallengeEntity()))
                 .collect(Collectors.toList());
     }
 

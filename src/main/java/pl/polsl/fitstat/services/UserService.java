@@ -1,11 +1,15 @@
 package pl.polsl.fitstat.services;
 
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import pl.polsl.fitstat.dtos.UserDTO;
+import pl.polsl.fitstat.enums.RoleEnum;
 import pl.polsl.fitstat.errors.CredentialsTakenException;
+import pl.polsl.fitstat.errors.NoPermissionToResourceException;
 import pl.polsl.fitstat.errors.ResourceNotFoundException;
 import pl.polsl.fitstat.models.RoleEntity;
 import pl.polsl.fitstat.models.UserEntity;
@@ -62,10 +66,24 @@ public class UserService {
         return getUserByUsername(username);
     }
 
+    public void logoutCurrentUser() {
+        Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext()
+                .getAuthentication());
+
+        auth.ifPresent(authentication -> keycloak.logoutUserByUserId(authentication.getName()));
+    }
+
     public List<UserEntity> getAllUsers() {
         return repository.findAll()
                 .stream()
                 .filter(userEntity -> !userEntity.isDeleted())
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getAllUsersAndMap() {
+        return getAllUsers()
+                .stream()
+                .map(UserDTO::new)
                 .collect(Collectors.toList());
     }
 
@@ -81,24 +99,26 @@ public class UserService {
         return new UserDTO(newUser);
     }
 
-    public void changePassword(String newPassword) {
-        UserEntity currentUser = getCurrentUser();
-        //currentUser.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-        repository.save(currentUser);
+    public void assignAdminRole(long userId){
+        UserEntity userEntity = getUserById(userId);
+        if(userEntity.getRole().getRole().equals(RoleEnum.ADMIN.toString()))
+            throw new IllegalStateException("This user already have admin role");
+
+        keycloak.assignAdminRole(userEntity);
+        RoleEntity adminRole = roleService.getRoleByName(RoleEnum.ADMIN.toString());
+        userEntity.setRole(adminRole);
+        repository.save(userEntity);
     }
 
-    public UserDTO changeCurrentUsersWeight(double newWeight){
+    public void changeCurrentUsersPassword(MultiValueMap body) {
+        keycloak.changePassword(body, getCurrentUser());
+    }
+
+    public UserDTO changeCurrentUsersWeight(double newWeight) {
         UserEntity currentUser = getCurrentUser();
         weightHistoryService.addNewWeightEntry(new WeightHistoryEntity(currentUser));
         currentUser.setWeight((float) newWeight);
         return new UserDTO(repository.save(currentUser));
-    }
-
-    public void checkPassword(String password) {
-//        boolean checkPassword = new BCryptPasswordEncoder().matches(password, getCurrentUser().getPassword());
-//        if (!checkPassword) {
-//            throw new ForbiddenException("Wrong Password");
-//        }
     }
 
     public UserDTO deleteUser(long userId) {
@@ -107,6 +127,12 @@ public class UserService {
         user.setDeleted(true);
         repository.save(user);
         return new UserDTO(user);
+    }
+
+    public void checkRightsToResource(long ownerId){
+        UserEntity user = getCurrentUser();
+        if(user.getId() != ownerId || !user.getRole().getRole().equals(RoleEnum.ADMIN.toString()))
+            throw new NoPermissionToResourceException("You have no rights to this resource");
     }
 
     private void checkForExistingData(UserDTO userDTO) {

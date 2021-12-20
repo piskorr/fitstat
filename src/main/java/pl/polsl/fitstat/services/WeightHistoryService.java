@@ -28,7 +28,9 @@ public class WeightHistoryService {
     }
 
     public WeightEntryDTO getWeightEntryByIdAndMap(long entryId) {
-        return new WeightEntryDTO(getWeightEntryById(entryId));
+        WeightHistoryEntity weightHistoryEntity = getWeightEntryById(entryId);
+        userService.checkRightsToResource(weightHistoryEntity.getUserEntity().getId());
+        return new WeightEntryDTO(weightHistoryEntity);
     }
 
     public List<WeightEntryDTO> getCurrentUsersWeightEntries() {
@@ -52,6 +54,7 @@ public class WeightHistoryService {
 
     public WeightEntryDTO deleteWeightEntryById(long entryId) {
         WeightHistoryEntity weightHistoryEntity = getWeightEntryById(entryId);
+        userService.checkRightsToResource(weightHistoryEntity.getUserEntity().getId());
         weightHistoryEntity.setDeleted(true);
         repository.save(weightHistoryEntity);
         return new WeightEntryDTO(weightHistoryEntity);

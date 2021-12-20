@@ -24,6 +24,8 @@ public class ActivityEntryDTO {
 
     private Long activityEntity;
 
+    private String activityName;
+
     public ActivityEntryDTO() {
     }
 
@@ -43,6 +45,7 @@ public class ActivityEntryDTO {
         this.caloriesBurned = activityEntry.getCaloriesBurned();
         this.userEntity = activityEntry.getUserEntity().getId();
         this.activityEntity = activityEntry.getActivityEntity().getId();
+        this.activityName = activityEntry.getActivityEntity().getName();
     }
 
 
@@ -92,5 +95,13 @@ public class ActivityEntryDTO {
 
     public void setActivityEntity(Long activityEntity) {
         this.activityEntity = activityEntity;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 }

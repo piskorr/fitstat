@@ -23,14 +23,8 @@ public class RecordLogEntity {
     @Column(name = "is_historic")
     private Boolean isHistoric;
 
-    @Column(name = "reps")
-    private Integer reps;
-
-    @Column(name = "time")
-    private Integer time;
-
-    @Column(name = "distance")
-    private Double distance;
+    @Column(name = "value")
+    private Integer value;
 
     @ManyToOne
     @JoinColumn(name = "activity_id")
@@ -39,6 +33,10 @@ public class RecordLogEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
+    private UnitEntity unit;
 
     public RecordLogEntity() {
     }
@@ -95,27 +93,11 @@ public class RecordLogEntity {
         isHistoric = historic;
     }
 
-    public Integer getReps() {
-        return reps;
+    public Integer getValue() {
+        return value;
     }
 
-    public void setReps(Integer reps) {
-        this.reps = reps;
-    }
-
-    public Integer getTime() {
-        return time;
-    }
-
-    public void setTime(Integer time) {
-        this.time = time;
-    }
-
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 }

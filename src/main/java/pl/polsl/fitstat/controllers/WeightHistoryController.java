@@ -12,10 +12,10 @@ public class WeightHistoryController {
 
     private final WeightHistoryService service;
 
-
     public WeightHistoryController(WeightHistoryService service) {
         this.service = service;
     }
+
 
     @GetMapping("/users/weight/{entryId}")
     public ResponseEntity<?> getWeightEntryById(@PathVariable long entryId){
@@ -23,7 +23,7 @@ public class WeightHistoryController {
     }
 
     @GetMapping("/users/weight")
-    public ResponseEntity<?> getWeightEntryById(){
+    public ResponseEntity<?> getCurrentUsersWeightEntries(){
         return ResponseEntity.status(HttpStatus.OK).body(service.getCurrentUsersWeightEntries());
     }
 

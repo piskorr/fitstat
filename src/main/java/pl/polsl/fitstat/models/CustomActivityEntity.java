@@ -1,7 +1,5 @@
 package pl.polsl.fitstat.models;
 
-import org.checkerframework.checker.units.qual.C;
-
 import javax.persistence.*;
 
 @Entity

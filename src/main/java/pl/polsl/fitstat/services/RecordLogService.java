@@ -31,7 +31,9 @@ public class RecordLogService {
     }
 
     public RecordDTO getRecordLogByIdAndMap(long recordId){
-        return new RecordDTO(getRecordLogById(recordId));
+        RecordLogEntity recordLogEntity = getRecordLogById(recordId);
+        userService.checkRightsToResource(recordLogEntity.getUserEntity().getId());
+        return new RecordDTO(recordLogEntity);
     }
 
     public List<RecordDTO> getAllRecordLogs() {
@@ -76,6 +78,7 @@ public class RecordLogService {
 
     public RecordDTO updateRecordLogById(long recordId, RecordDTO recordDTO) {
         RecordLogEntity recordLogEntity = getRecordLogById(recordId);
+        userService.checkRightsToResource(recordLogEntity.getUserEntity().getId());
         updateRecordLog(recordLogEntity, recordDTO);
         repository.save(recordLogEntity);
         return new RecordDTO(recordLogEntity);
@@ -85,19 +88,12 @@ public class RecordLogService {
         if (recordDTO.getRecordDate() != null) {
             recordLogEntity.setRecordDate(recordDTO.getRecordDate());
         }
-        if (recordDTO.getDistance() != null) {
-            recordLogEntity.setDistance(recordDTO.getDistance());
-        }
-        if (recordDTO.getReps() != null) {
-            recordLogEntity.setReps(recordDTO.getReps());
-        }
-        if (recordDTO.getTime() != null) {
-            recordLogEntity.setTime(recordDTO.getTime());
-        }
+        //TODO
     }
 
     public RecordDTO deleteRecordLogById(long recordId) {
         RecordLogEntity recordLogEntity = getRecordLogById(recordId);
+        userService.checkRightsToResource(recordLogEntity.getUserEntity().getId());
         recordLogEntity.setDeleted(true);
         repository.save(recordLogEntity);
         return new RecordDTO(recordLogEntity);

@@ -10,12 +10,25 @@ spring:
     username: root
     password: root
 
+springfox:
+  documentation:
+    swaggerUi:
+      baseUrl: /documentation
+    openApi:
+      v3:
+        path: /documentation/v3/api-docs
+    swagger:
+      v2:
+        path: /documentation/v2/api-docs
+
 keycloak:
   realm: fitstat-realm
   resource: admin-fitstat
   auth-server-url: http://localhost:8080/auth
   credentials:
     secret: d61c8256-aed4-4faf-b17a-711904359eb4
+  cors: true
+  enable-basic-auth: true
 
 
 server:

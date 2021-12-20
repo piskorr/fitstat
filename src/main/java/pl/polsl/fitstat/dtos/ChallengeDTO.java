@@ -23,6 +23,8 @@ public class ChallengeDTO {
     @Min( value = 1, message = "activity id must be greater than 0")
     private Long activityId;
 
+    private String activityName;
+
     public ChallengeDTO() {
     }
 
@@ -31,6 +33,7 @@ public class ChallengeDTO {
         this.description = challengeEntity.getDescription();
         this.challengeTime = challengeEntity.getChallengeTime();
         this.activityId = challengeEntity.getActivityEntity().getId();
+        this.activityName = challengeEntity.getActivityEntity().getName();
     }
 
     public Long getId() {
@@ -63,5 +66,13 @@ public class ChallengeDTO {
 
     public void setActivityId(Long activityId) {
         this.activityId = activityId;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 }

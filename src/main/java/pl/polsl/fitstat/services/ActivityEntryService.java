@@ -3,13 +3,22 @@ package pl.polsl.fitstat.services;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pl.polsl.fitstat.dtos.ActivityEntryDTO;
+import pl.polsl.fitstat.dtos.CaloriesSummaryDTO;
+import pl.polsl.fitstat.errors.NoPermissionToResourceException;
 import pl.polsl.fitstat.errors.ResourceNotFoundException;
 import pl.polsl.fitstat.models.ActivityEntity;
 import pl.polsl.fitstat.models.UserEntity;
 import pl.polsl.fitstat.models.ActivityEntryEntity;
 import pl.polsl.fitstat.repositories.ActivityEntryRepository;
 
+import org.joda.time.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +29,7 @@ public class ActivityEntryService {
     private final ActivityService activityService;
     private final UsersChallengeService usersChallengeService;
 
-    public ActivityEntryService(ActivityEntryRepository repository, UserService userService, ActivityService activityService,@Lazy UsersChallengeService usersChallengeService) {
+    public ActivityEntryService(ActivityEntryRepository repository, UserService userService, ActivityService activityService, @Lazy UsersChallengeService usersChallengeService) {
         this.repository = repository;
         this.userService = userService;
         this.activityService = activityService;
@@ -34,7 +43,9 @@ public class ActivityEntryService {
     }
 
     public ActivityEntryDTO getActivityEntryByIdAndMap(long entryId) {
-        return new ActivityEntryDTO(getActivityEntryById(entryId));
+        ActivityEntryEntity activityEntry = getActivityEntryById(entryId);
+        userService.checkRightsToResource(activityEntry.getUserEntity().getId());
+        return new ActivityEntryDTO(activityEntry);
     }
 
     public List<ActivityEntryDTO> getAllCurrentUsersActivityEntries() {
@@ -43,6 +54,57 @@ public class ActivityEntryService {
                 .filter(activityEntry -> !activityEntry.isDeleted())
                 .map(ActivityEntryDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<ActivityEntryDTO> getCurrentUsersTodaysActivityEntries() {
+        return repository.findAllByUserEntity_Id(userService.getCurrentUser().getId())
+                .stream()
+                .filter(activityEntry -> !activityEntry.isDeleted() && checkIsToday(activityEntry.getActivityDate()))
+                .map(ActivityEntryDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<CaloriesSummaryDTO> getCurrentUsersWeeklyCalories() {
+        Map<Integer, Double> result = new HashMap<>();
+        for (int i = 1; i < 8; i++) {
+            result.put(i, 0.0);
+        }
+
+        List<ActivityEntryEntity> weekList = repository.findAllByUserEntity_Id(userService.getCurrentUser().getId())
+                .stream()
+                .filter(activityEntry -> !activityEntry.isDeleted() && checkIsThisWeek(activityEntry.getActivityDate()))
+                .collect(Collectors.toList());
+
+        weekList.forEach(activityEntry -> {
+            result.forEach((integer, aDouble) ->
+            {
+                if (activityEntry.getActivityDate().getDayOfWeek().getValue() == integer) {
+                    Double calories = result.get(integer);
+                    calories += activityEntry.getCaloriesBurned();
+                    result.put(integer, calories);
+                }
+            });
+        });
+
+        List<CaloriesSummaryDTO> summary = new ArrayList<>();
+        String[] strDays = new String[]{"NULL","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        result.forEach((integer, aDouble) ->
+        {
+            summary.add(new CaloriesSummaryDTO(strDays[integer], aDouble));
+        });
+
+        return summary;
+    }
+
+    private boolean checkIsToday(LocalDateTime localDateTime) {
+        LocalDate localDate = localDateTime.toLocalDate();
+        return localDate.isEqual(LocalDate.now());
+    }
+
+    private boolean checkIsThisWeek(LocalDateTime localDateTime) {
+        org.joda.time.LocalDate now = org.joda.time.LocalDate.now();
+        org.joda.time.LocalDate localDate = new org.joda.time.LocalDate(localDateTime.getYear(), localDateTime.getMonth().getValue(), localDateTime.getDayOfMonth());
+        return now.weekOfWeekyear().get() == localDate.weekOfWeekyear().get();
     }
 
     public List<ActivityEntryEntity> getAllCurrentUsersActivityEntriesByActivityId(long activityId) {
@@ -92,6 +154,7 @@ public class ActivityEntryService {
 
     public ActivityEntryDTO updateActivityEntryById(long entryId, ActivityEntryDTO activityEntryDTO) {
         ActivityEntryEntity activityEntry = getActivityEntryById(entryId);
+        userService.checkRightsToResource(activityEntry.getUserEntity().getId());
         updateActivityEntry(activityEntry, activityEntryDTO);
         activityEntry.setCaloriesBurned(calculateCaloriesBurned(activityEntry.getActivityDuration(), activityEntry.getActivityEntity().getMET()));
         repository.save(activityEntry);
@@ -108,12 +171,13 @@ public class ActivityEntryService {
 
     public ActivityEntryDTO deleteActivityEntryById(long usersActivityId) {
         ActivityEntryEntity activityEntry = getActivityEntryById(usersActivityId);
+        userService.checkRightsToResource(activityEntry.getUserEntity().getId());
         activityEntry.setDeleted(true);
         repository.save(activityEntry);
         return new ActivityEntryDTO(activityEntry);
     }
 
-    public void deleteAllActivityEntriesByUserId(long userId){
+    public void deleteAllActivityEntriesByUserId(long userId) {
         List<ActivityEntryEntity> activityEntryList = repository.findAllByUserEntity_Id(userId)
                 .stream()
                 .filter(activityEntry -> !activityEntry.isDeleted())
@@ -122,4 +186,6 @@ public class ActivityEntryService {
         activityEntryList.forEach(activityEntry -> activityEntry.setDeleted(true));
         repository.saveAll(activityEntryList);
     }
+
+
 }

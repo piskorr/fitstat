@@ -6,9 +6,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import pl.polsl.fitstat.errors.CredentialsTakenException;
-import pl.polsl.fitstat.errors.ResourceAlreadyExistException;
-import pl.polsl.fitstat.errors.ResourceNotFoundException;
+import pl.polsl.fitstat.errors.*;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
@@ -35,7 +33,12 @@ public class ExceptionController {
 
     @ExceptionHandler(ResourceAlreadyExistException.class)
     ResponseEntity<Object> handlerResourceAlreadyExistFound(ResourceAlreadyExistException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(NoPermissionToResourceException.class)
+    ResponseEntity<Object> handlerNoPermissionToResource(NoPermissionToResourceException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 
     @ExceptionHandler(ForbiddenException.class)
@@ -46,6 +49,11 @@ public class ExceptionController {
     @ExceptionHandler(NotAuthorizedException.class)
     ResponseEntity<Object> handlerNotAuthorizedException(NotAuthorizedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(WrongPasswordException.class)
+    ResponseEntity<Object> handlerNotAuthorizedException(WrongPasswordException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -11,7 +11,6 @@ import pl.polsl.fitstat.services.ActivityService;
 import javax.validation.Valid;
 
 @Controller
-//@PreAuthorize("hasRole('ADMIN')")
 public class ActivityController {
 
     private final ActivityService service;
@@ -25,22 +24,29 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllActivities());
     }
 
+    @GetMapping("/documentation/all")
+    public ResponseEntity<?> getAllActivitiesTEST() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllActivities());
+    }
+
     @GetMapping("/activities/{id}")
     public ResponseEntity<?> getActivityById(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getActivityById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/activities")
     public ResponseEntity<?> addNewActivity(@RequestBody @Valid ActivityDTO activityDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.addNewActivity(activityDTO));
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/activities/{id}")
     public ResponseEntity<?> updateActivityById(@PathVariable long id, @RequestBody ActivityDTO activityDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateActivityById(id, activityDTO));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/activities/{id}")
     public ResponseEntity<?> deleteActivityById(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.deleteActivityById(id));
