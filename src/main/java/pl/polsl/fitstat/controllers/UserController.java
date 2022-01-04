@@ -28,6 +28,12 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(new UserDTO(userService.getUserById(id)));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/all")
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsersAndMap());

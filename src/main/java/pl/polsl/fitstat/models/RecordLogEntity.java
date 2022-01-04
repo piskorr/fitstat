@@ -41,8 +41,14 @@ public class RecordLogEntity {
     public RecordLogEntity() {
     }
 
-    public RecordLogEntity(RecordDTO recordDTO, ActivityEntity activity, UserEntity currentUser) {
-
+    public RecordLogEntity(RecordDTO recordDTO, ActivityEntity activity, UserEntity currentUser, UnitEntity unit) {
+        this.recordDate = recordDTO.getRecordDate();
+        this.isDeleted = false;
+        this.isHistoric = true;
+        this.value = recordDTO.getValue();
+        this.activityEntity = activity;
+        this.userEntity = currentUser;
+        this.unit = unit;
     }
 
     public LocalDate getRecordDate() {
@@ -99,5 +105,13 @@ public class RecordLogEntity {
 
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    public UnitEntity getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitEntity unit) {
+        this.unit = unit;
     }
 }

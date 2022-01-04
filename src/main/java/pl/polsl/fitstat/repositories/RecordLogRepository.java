@@ -19,4 +19,6 @@ public interface RecordLogRepository extends JpaRepository<RecordLogEntity, Long
 
     List<RecordLogEntity> findAllByUserEntity_Id(Long userEntity_id);
 
+    Optional<RecordLogEntity> findAllByUserEntity_IdAndUnit_IdAndActivityEntity_IdAndIsHistoricFalse(Long userEntity_id, Long unit_id, Long activityEntity_id);
+
 }

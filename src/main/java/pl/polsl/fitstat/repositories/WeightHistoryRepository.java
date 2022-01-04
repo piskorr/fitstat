@@ -10,6 +10,9 @@ import java.util.Optional;
 @Repository
 public interface WeightHistoryRepository extends JpaRepository<WeightHistoryEntity, Long> {
 
-    List<WeightHistoryEntity> findAllByUserEntity_Id(Long userEntity_id);
+    List<WeightHistoryEntity> findAllByUserEntity_IdOrderByDateDesc(Long userEntity_id);
 
+    Optional<WeightHistoryEntity> findByUserEntity_IdAndIsHistoricFalse(Long userEntity_id);
+
+    Optional<WeightHistoryEntity> findFirstByUserEntity_IdOrderByDateDesc(Long userEntity_id);
 }

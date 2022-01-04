@@ -5,8 +5,10 @@ import pl.polsl.fitstat.dtos.ChallengeDTO;
 import pl.polsl.fitstat.errors.ResourceNotFoundException;
 import pl.polsl.fitstat.models.ActivityEntity;
 import pl.polsl.fitstat.models.ChallengeEntity;
+import pl.polsl.fitstat.models.UserEntity;
 import pl.polsl.fitstat.repositories.ChallengeRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +17,6 @@ public class ChallengeService {
 
     private final ChallengeRepository repository;
     private final ActivityService activityService;
-
 
     public ChallengeService(ChallengeRepository repository, ActivityService activityService) {
         this.repository = repository;
@@ -31,7 +32,11 @@ public class ChallengeService {
         return new ChallengeDTO(getChallengeById(challengeId));
     }
 
-    public List<ChallengeDTO> getAllChallenges() {
+    public List<ChallengeEntity> getAllChallenges() {
+        return new ArrayList<>(repository.findAll());
+    }
+
+    public List<ChallengeDTO> getAllChallengesAndMap() {
         return repository.findAll()
                 .stream()
                 .map(ChallengeDTO::new)
@@ -39,7 +44,8 @@ public class ChallengeService {
     }
 
     public ChallengeDTO addNewChallenge(ChallengeDTO challengeDTO) {
-        ChallengeEntity newChallenge = new ChallengeEntity(challengeDTO);
+        ActivityEntity activity = activityService.getActivityById(challengeDTO.getActivityId());
+        ChallengeEntity newChallenge = new ChallengeEntity(challengeDTO, activity);
         repository.save(newChallenge);
         return new ChallengeDTO(newChallenge);
     }

@@ -29,10 +29,13 @@ public class ChallengeEntity {
     @JoinColumn(name = "activity_id")
     ActivityEntity activityEntity;
 
-    public ChallengeEntity() {
+    public ChallengeEntity(ChallengeDTO challengeDTO, ActivityEntity activity) {
+        this.description= challengeDTO.getDescription();
+        this.challengeTime = challengeDTO.getChallengeTime();
+        this.activityEntity = activity;
     }
 
-    public ChallengeEntity(ChallengeDTO challengeDTO) {
+    public ChallengeEntity() {
 
     }
 

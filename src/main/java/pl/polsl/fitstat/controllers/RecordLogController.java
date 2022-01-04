@@ -23,6 +23,16 @@ public class RecordLogController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getRecordLogByIdAndMap(recordId));
     }
 
+    @GetMapping("/records/current")
+    public ResponseEntity<?> getAllCurrentUsersCurrentRecords(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersCurrentRecords());
+    }
+
+    @GetMapping("/records/units")
+    public ResponseEntity<?> getUnits(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getUnits());
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/records/all")
     public ResponseEntity<?> getAllRecordLogs(){

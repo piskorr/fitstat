@@ -8,6 +8,7 @@ import pl.polsl.fitstat.models.WeightHistoryEntity;
 import pl.polsl.fitstat.repositories.WeightHistoryRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class WeightHistoryService {
     }
 
     public List<WeightEntryDTO> getCurrentUsersWeightEntries() {
-        return repository.findAllByUserEntity_Id(userService.getCurrentUser().getId())
+        return repository.findAllByUserEntity_IdOrderByDateDesc(userService.getCurrentUser().getId())
                 .stream()
                 .filter(weightHistoryEntity -> !weightHistoryEntity.isDeleted())
                 .map(WeightEntryDTO::new)
@@ -43,13 +44,26 @@ public class WeightHistoryService {
 
     public WeightEntryDTO addNewWeightEntryToCurrentUser(WeightEntryDTO weightEntryDTO) {
         UserEntity user = userService.getCurrentUser();
-        WeightHistoryEntity weightHistoryEntity = repository.save(new WeightHistoryEntity(weightEntryDTO, user));
-        return new WeightEntryDTO(weightHistoryEntity);
+        WeightHistoryEntity newWeight = new WeightHistoryEntity(weightEntryDTO, user);
+        repository.findFirstByUserEntity_IdOrderByDateDesc(user.getId())
+                .ifPresent(oldWeight -> {
+                    if(oldWeight.getDate().isAfter(newWeight.getDate()) ) {
+                        newWeight.setHistoric(true);
+                    }else{
+                        oldWeight.setHistoric(true);
+                        userService.changeCurrentUsersWeight(newWeight.getWeight());
+                    }
+                });
+        repository.save(newWeight);
+        return new WeightEntryDTO(newWeight);
     }
 
     public void addNewWeightEntry(WeightHistoryEntity weightHistoryEntity) {
         repository.save(weightHistoryEntity);
-        new WeightEntryDTO(weightHistoryEntity);
+    }
+
+    public void addFirstWeightEntry(WeightHistoryEntity weightHistoryEntity) {
+        repository.save(weightHistoryEntity);
     }
 
     public WeightEntryDTO deleteWeightEntryById(long entryId) {

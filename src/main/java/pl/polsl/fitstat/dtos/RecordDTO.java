@@ -1,6 +1,8 @@
 package pl.polsl.fitstat.dtos;
 
+import pl.polsl.fitstat.models.ActivityEntity;
 import pl.polsl.fitstat.models.RecordLogEntity;
+import pl.polsl.fitstat.models.UserEntity;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Min;
@@ -12,27 +14,32 @@ public class RecordDTO {
 
     private LocalDate recordDate;
 
-    @Min(value = 1, message = "Value of repetitions must be greater than 0")
-    private Integer reps;
-
-    @Min(value = 1, message = "Value of time must be greater than 0")
-    private Integer time;
-
-    @Min(value = 1, message = "Value of distance must be greater than 0")
-    private Double distance;
-
     private Boolean isDeleted;
 
     private Boolean isHistoric;
 
-    private String activityEntity;
+    private Integer value;
 
-    private String userEntity;
+    private Long unitId;
+
+    private UnitDTO unit;
+
+    private ActivityDTO activityEntity;
+
+    private UserDTO userEntity;
 
     public RecordDTO() {
     }
 
     public RecordDTO(RecordLogEntity recordLogEntity) {
+        this.id = recordLogEntity.getId();;
+        this.recordDate = recordLogEntity.getRecordDate();
+        this.isDeleted = recordLogEntity.isDeleted();
+        this.isHistoric = recordLogEntity.isHistoric();
+        this.value = recordLogEntity.getValue();
+        this.unit = new UnitDTO(recordLogEntity.getUnit());
+        this.activityEntity = new ActivityDTO(recordLogEntity.getActivityEntity());
+//        this.userEntity = new UserDTO(recordLogEntity.getUserEntity());
     }
 
     public Long getId() {
@@ -59,51 +66,51 @@ public class RecordDTO {
         isDeleted = deleted;
     }
 
-    public String getActivityEntity() {
-        return activityEntity;
-    }
-
-    public void setActivityEntity(String activityEntity) {
-        this.activityEntity = activityEntity;
-    }
-
-    public String getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(String userEntity) {
-        this.userEntity = userEntity;
-    }
-
-    public Integer getReps() {
-        return reps;
-    }
-
-    public void setReps(Integer reps) {
-        this.reps = reps;
-    }
-
-    public Integer getTime() {
-        return time;
-    }
-
-    public void setTime(Integer time) {
-        this.time = time;
-    }
-
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
-    }
-
     public Boolean getHistoric() {
         return isHistoric;
     }
 
     public void setHistoric(Boolean historic) {
         isHistoric = historic;
+    }
+
+    public UnitDTO getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitDTO unit) {
+        this.unit = unit;
+    }
+
+    public ActivityDTO getActivityEntity() {
+        return activityEntity;
+    }
+
+    public void setActivityEntity(ActivityDTO activityEntity) {
+        this.activityEntity = activityEntity;
+    }
+
+    public UserDTO getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserDTO userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+    public Long getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(Long unitId) {
+        this.unitId = unitId;
     }
 }

@@ -20,6 +20,9 @@ public class WeightHistoryEntity {
     @Column(name = "date")
     private LocalDate date;
 
+    @Column(name = "is_historic")
+    private Boolean isHistoric;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
@@ -35,11 +38,23 @@ public class WeightHistoryEntity {
         this.userEntity = userEntity;
         this.date = LocalDate.now();
         this.isDeleted = false;
+        this.isHistoric = false;
+    }
+
+    public WeightHistoryEntity(Float weight, UserEntity userEntity) {
+        this.weight = Double.valueOf(weight);
+        this.userEntity = userEntity;
+        this.date = LocalDate.now();
+        this.isDeleted = false;
+        this.isHistoric = false;
     }
 
     public WeightHistoryEntity(WeightEntryDTO weightEntryDTO, UserEntity user) {
-
-
+        this.weight = weightEntryDTO.getWeight();
+        this.userEntity = user;
+        this.date = weightEntryDTO.getDate();
+        this.isDeleted = false;
+        this.isHistoric = false;
     }
 
     public Long getId() {
@@ -77,5 +92,13 @@ public class WeightHistoryEntity {
 
     public void setWeight(Double weight) {
         this.weight = weight;
+    }
+
+    public Boolean getHistoric() {
+        return isHistoric;
+    }
+
+    public void setHistoric(Boolean historic) {
+        isHistoric = historic;
     }
 }

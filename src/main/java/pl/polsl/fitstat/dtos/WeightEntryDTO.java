@@ -16,19 +16,21 @@ public class WeightEntryDTO {
 
     private LocalDate date;
 
+    private Boolean isHistoric;
+
+    private Boolean isDeleted;
+
     private Long userId;
 
     public WeightEntryDTO() {
     }
 
-    public WeightEntryDTO(Double weight, LocalDate date, Long userId) {
-        this.weight = weight;
-        this.date = date;
-        this.userId = userId;
-    }
-
-    public WeightEntryDTO(WeightHistoryEntity weightEntryById) {
-
+    public WeightEntryDTO(WeightHistoryEntity weightHistoryEntity) {
+        this.id = weightHistoryEntity.getId();
+        this.weight = weightHistoryEntity.getWeight();
+        this.date = weightHistoryEntity.getDate();
+        this.isHistoric = weightHistoryEntity.getHistoric();
+        this.isDeleted = weightHistoryEntity.isDeleted();
     }
 
     public Long getId() {
@@ -61,5 +63,21 @@ public class WeightEntryDTO {
 
     public void setWeight(Double weight) {
         this.weight = weight;
+    }
+
+    public Boolean getHistoric() {
+        return isHistoric;
+    }
+
+    public void setHistoric(Boolean historic) {
+        isHistoric = historic;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

@@ -83,6 +83,7 @@ public class UserService {
     public List<UserDTO> getAllUsersAndMap() {
         return getAllUsers()
                 .stream()
+                .filter(userEntity -> !userEntity.getId().equals(getCurrentUser().getId()))
                 .map(UserDTO::new)
                 .collect(Collectors.toList());
     }
@@ -95,13 +96,14 @@ public class UserService {
         RoleEntity role = roleService.getRoleByName(userDTO.getRole());
         newUser.setRole(role);
         repository.save(newUser);
+        weightHistoryService.addFirstWeightEntry(new WeightHistoryEntity(newUser.getWeight(), newUser));
         usersChallengeService.addChallengesForUser(newUser);
         return new UserDTO(newUser);
     }
 
-    public void assignAdminRole(long userId){
+    public void assignAdminRole(long userId) {
         UserEntity userEntity = getUserById(userId);
-        if(userEntity.getRole().getRole().equals(RoleEnum.ADMIN.toString()))
+        if (userEntity.getRole().getRole().equals(RoleEnum.ADMIN.toString()))
             throw new IllegalStateException("This user already have admin role");
 
         keycloak.assignAdminRole(userEntity);
@@ -114,11 +116,9 @@ public class UserService {
         keycloak.changePassword(body, getCurrentUser());
     }
 
-    public UserDTO changeCurrentUsersWeight(double newWeight) {
+    public void changeCurrentUsersWeight(double newWeight) {
         UserEntity currentUser = getCurrentUser();
-        weightHistoryService.addNewWeightEntry(new WeightHistoryEntity(currentUser));
         currentUser.setWeight((float) newWeight);
-        return new UserDTO(repository.save(currentUser));
     }
 
     public UserDTO deleteUser(long userId) {
@@ -129,10 +129,11 @@ public class UserService {
         return new UserDTO(user);
     }
 
-    public void checkRightsToResource(long ownerId){
+    public void checkRightsToResource(long ownerId) {
         UserEntity user = getCurrentUser();
-        if(user.getId() != ownerId || !user.getRole().getRole().equals(RoleEnum.ADMIN.toString()))
-            throw new NoPermissionToResourceException("You have no rights to this resource");
+        if (user.getId() != ownerId)
+            if (!user.getRole().getRole().equals(RoleEnum.ADMIN.toString()))
+                throw new NoPermissionToResourceException("You have no rights to this resource");
     }
 
     private void checkForExistingData(UserDTO userDTO) {

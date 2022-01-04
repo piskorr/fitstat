@@ -27,7 +27,7 @@ public class ChallengeController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/challenges/all")
     public ResponseEntity<?> getAllChallenges() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllChallenges());
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllChallengesAndMap());
     }
 
     @PreAuthorize("hasRole('ADMIN')")

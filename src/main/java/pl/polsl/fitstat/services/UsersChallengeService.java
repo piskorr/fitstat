@@ -62,7 +62,7 @@ public class UsersChallengeService {
     }
 
     public void addChallengesForAllUsers(int count) {
-        long challengeCount = challengeService.getAllChallenges().size();
+        long challengeCount = challengeService.getAllChallengesAndMap().size();
         if (challengeCount < count)
             throw new InsufficientChallengesCountException("Not enough challenges!");
 
@@ -76,7 +76,7 @@ public class UsersChallengeService {
     }
 
     public void addChallengesForUser(UserEntity user) {
-        long challengeCount = challengeService.getAllChallenges().size();
+        long challengeCount = challengeService.getAllChallengesAndMap().size();
         if (challengeCount < challengesCount)
             throw new InsufficientChallengesCountException("Not enough challenges!");
 
@@ -95,9 +95,9 @@ public class UsersChallengeService {
         System.out.println(LocalDateTime.now() + ": Adding done!");
     }
 
-    public UsersChallengeDTO addChallengeToUser(long challengeId, UserEntity userEntity) {
-        ChallengeEntity challengeEntity = challengeService.getChallengeById(challengeId);
-        UsersChallengeEntity usersChallengeEntity = new UsersChallengeEntity(challengeEntity, userEntity);
+    public UsersChallengeDTO addChallengeToUser(int challengeNum, UserEntity userEntity) {
+        List<ChallengeEntity> challengeList = challengeService.getAllChallenges();
+        UsersChallengeEntity usersChallengeEntity = new UsersChallengeEntity(challengeList.get(challengeNum - 1), userEntity);
         repository.save(usersChallengeEntity);
         return new UsersChallengeDTO(usersChallengeEntity);
     }
