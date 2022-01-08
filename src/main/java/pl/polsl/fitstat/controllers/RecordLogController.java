@@ -39,6 +39,11 @@ public class RecordLogController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllRecordLogs());
     }
 
+    @GetMapping("/records")
+    public ResponseEntity<?> getAllCurrentUsersRecordLogs(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersRecordLogs());
+    }
+
     @GetMapping("/activities/{activityId}/records")
     public ResponseEntity<?> getCurrentUsersRecordLogsByActivityId(@PathVariable long activityId){
         return ResponseEntity.status(HttpStatus.OK).body(service.getCurrentUsersRecordLogsByActivityId(activityId));
