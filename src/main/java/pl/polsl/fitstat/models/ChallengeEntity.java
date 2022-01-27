@@ -23,11 +23,11 @@ public class ChallengeEntity {
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "challengeEntity")
-    Set<UsersChallengeEntity> usersChallenges;
+    private Set<UsersChallengeEntity> usersChallenges;
 
     @ManyToOne
     @JoinColumn(name = "activity_id")
-    ActivityEntity activityEntity;
+    private ActivityEntity activityEntity;
 
     public ChallengeEntity(ChallengeDTO challengeDTO, ActivityEntity activity) {
         this.description= challengeDTO.getDescription();
