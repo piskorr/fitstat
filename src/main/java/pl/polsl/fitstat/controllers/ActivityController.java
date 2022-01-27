@@ -24,11 +24,6 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllActivities());
     }
 
-    @GetMapping("/documentation/all")
-    public ResponseEntity<?> getAllActivitiesTEST() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllActivities());
-    }
-
     @GetMapping("/activities/{id}")
     public ResponseEntity<?> getActivityById(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getActivityById(id));
@@ -38,6 +33,11 @@ public class ActivityController {
     @PostMapping("/activities")
     public ResponseEntity<?> addNewActivity(@RequestBody @Valid ActivityDTO activityDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.addNewActivity(activityDTO));
+    }
+
+    @GetMapping("/documentation/all")
+    public ResponseEntity<?> getAllActivitiesTEST() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllActivities());
     }
 
     @PreAuthorize("hasRole('ADMIN')")

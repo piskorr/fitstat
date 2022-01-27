@@ -39,15 +39,15 @@ public class ActivityEntryController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getActivityEntryByIdAndMap(entryId));
     }
 
-    @GetMapping("activities/{activityId}/entries")
-    public ResponseEntity<?> getAllCurrentUsersActivityEntriesByActivityId(@PathVariable long activityId) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersActivityEntriesByActivityId(activityId));
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("activities/{activityId}/entries/all")
     public ResponseEntity<?> getAllActivityEntriesByActivityId(@PathVariable long activityId) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllActivityEntriesByActivityId(activityId));
+    }
+
+    @GetMapping("activities/{activityId}/entries")
+    public ResponseEntity<?> getAllCurrentUsersActivityEntriesByActivityId(@PathVariable long activityId) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersActivityEntriesByActivityId(activityId));
     }
 
     @PostMapping("activities/{activityId}/entries")
