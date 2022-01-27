@@ -54,9 +54,6 @@ public class UserEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
     Set<UsersChallengeEntity> usersChallenges;
 
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")
-    Set<PlannedActivityEntity> plannedActivities;
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userEntity")

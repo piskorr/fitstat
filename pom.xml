@@ -10,9 +10,10 @@
 	</parent>
 	<groupId>pl.polsl</groupId>
 	<artifactId>fitstat</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>fitstat</name>
 	<description>Fitstat project</description>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>16</java.version>
 	</properties>
@@ -124,6 +125,19 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>spring-boot</classifier>
+							<mainClass>
+								pl.polsl.fitstat.FitstatApplication
+							</mainClass>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

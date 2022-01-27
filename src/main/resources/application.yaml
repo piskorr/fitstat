@@ -36,5 +36,6 @@ server:
 
 my:
   challenge-count: 3
+  name: 'test'
 
 

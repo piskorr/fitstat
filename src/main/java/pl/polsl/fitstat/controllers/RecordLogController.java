@@ -41,7 +41,7 @@ public class RecordLogController {
 
     @GetMapping("/records")
     public ResponseEntity<?> getAllCurrentUsersRecordLogs(){
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersRecordLogs());
+        return null;// ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersRecordLogs());
     }
 
     @GetMapping("/activities/{activityId}/records")
