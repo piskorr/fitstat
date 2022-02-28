@@ -1,0 +1,1 @@
+alter table users_records add column is_historic bit;

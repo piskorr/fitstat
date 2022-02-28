@@ -1,0 +1,1 @@
+alter table users_activities add column calories_burned int;

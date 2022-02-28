@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "my.challenge-count",
+      "type": "java.lang.String",
+      "description": "Description for my.challenge-count."
+    },
+    {
+      "name": "my.challenge-count",
+      "type": "java.lang.String",
+      "description": "Description for my.challenge-count."
+    }
+  ] }

@@ -1,0 +1,1 @@
+alter table weight_history add column is_historic bit;
