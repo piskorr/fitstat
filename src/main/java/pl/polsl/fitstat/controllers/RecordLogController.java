@@ -54,12 +54,12 @@ public class RecordLogController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.addRecordLogToCurrentUser(activityId,recordDTO));
     }
 
-    @PutMapping("records/{recordId}")
+    @PutMapping("/records/{recordId}")
     public ResponseEntity<?> updateRecordLogById(@PathVariable long recordId, @RequestBody RecordDTO recordDTO){
         return ResponseEntity.status(HttpStatus.OK).body(service.updateRecordLogById(recordId, recordDTO));
     }
 
-    @DeleteMapping("records/{recordId}")
+    @DeleteMapping("/records/{recordId}")
     public ResponseEntity<?> deleteRecordLogById(@PathVariable long recordId){
         return ResponseEntity.status(HttpStatus.OK).body(service.deleteRecordLogById(recordId));
     }

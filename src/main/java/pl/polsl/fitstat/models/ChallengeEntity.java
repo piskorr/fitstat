@@ -21,6 +21,9 @@ public class ChallengeEntity {
     @Column(name = "challenge_time")
     private Integer challengeTime;
 
+    @Column(name="is_deleted")
+    private Boolean isDeleted;
+
     @Fetch(FetchMode.JOIN)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "challengeEntity")
     private Set<UsersChallengeEntity> usersChallenges;
@@ -33,6 +36,7 @@ public class ChallengeEntity {
         this.description= challengeDTO.getDescription();
         this.challengeTime = challengeDTO.getChallengeTime();
         this.activityEntity = activity;
+        this.isDeleted = false;
     }
 
     public ChallengeEntity() {
@@ -65,5 +69,13 @@ public class ChallengeEntity {
 
     public void setActivityEntity(ActivityEntity activityEntity) {
         this.activityEntity = activityEntity;
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

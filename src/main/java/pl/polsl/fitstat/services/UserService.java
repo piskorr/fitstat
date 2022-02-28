@@ -1,6 +1,7 @@
 package pl.polsl.fitstat.services;
 
 
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,7 +64,16 @@ public class UserService {
         if (auth.isPresent())
             username = keycloak.getUsernameByUserId(auth.get().getName());
 
-        return getUserByUsername(username);
+        try {
+            return getUserByUsername(username);
+        } catch (ResourceNotFoundException e) {
+            UserRepresentation keycloakUser = keycloak.getUserResource(auth.get().getName()).toRepresentation();
+            String email = keycloakUser.getEmail();
+            String firstName = keycloakUser.getFirstName();
+            String lastName = keycloakUser.getLastName();
+            createUser(username, email, firstName, lastName);
+            return getUserByUsername(username);
+        }
     }
 
     public void logoutCurrentUser() {
@@ -86,6 +96,26 @@ public class UserService {
                 .filter(userEntity -> !userEntity.getId().equals(getCurrentUser().getId()))
                 .map(UserDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getAllUsersList() {
+        return repository.findAll()
+                .stream()
+                .filter(userEntity -> !userEntity.getId().equals(getCurrentUser().getId()))
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public UserDTO createUser(String username, String email, String firstName, String lastName) {
+        UserDTO userDTO = new UserDTO(username, email, firstName, lastName);
+        keycloak.assignUserRole(userDTO);
+        UserEntity newUser = new UserEntity(userDTO);
+        RoleEntity role = roleService.getRoleByName(userDTO.getRole());
+        newUser.setRole(role);
+        repository.save(newUser);
+        weightHistoryService.addFirstWeightEntry(new WeightHistoryEntity((float) 50, newUser));  //todo
+        usersChallengeService.addChallengesForUser(newUser);
+        return new UserDTO(newUser);
     }
 
     public UserDTO createUser(UserDTO userDTO) {
@@ -157,4 +187,13 @@ public class UserService {
     }
 
 
+    public String switchUsersBanStatus(Long id) {
+        UserEntity user = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User with id: " + id + " does not exist!"));
+
+        keycloak.setUserStatus(user.getUsername(), user.isDeleted());
+        user.setDeleted(!user.isDeleted());
+        repository.save(user);
+        return "USER ENABLED: " + user.isDeleted();
+    }
 }

@@ -1,5 +1,6 @@
 package pl.polsl.fitstat.dtos;
 
+import pl.polsl.fitstat.enums.RoleEnum;
 import pl.polsl.fitstat.models.UserEntity;
 
 import javax.validation.constraints.*;
@@ -29,16 +30,7 @@ public class UserDTO {
 
     private String lastName;
 
-    private LocalDate dob;
-
-    private String sex;
-
-    @NotNull(message = "weight cannot be empty")
-    @Min(value = 1)
-    @Max(value = 300)
-    private Float weight;
-
-    private Float height;
+    private Boolean isDeleted;
 
     public UserDTO() {
     }
@@ -56,7 +48,15 @@ public class UserDTO {
         this.email = userEntity.getEmail();
         this.firstName = userEntity.getFirstName();
         this.lastName = userEntity.getLastName();
-        this.weight = userEntity.getWeight();
+        this.isDeleted = userEntity.isDeleted();
+    }
+
+    public UserDTO(String username, String email, String firstName, String lastName) {
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = RoleEnum.USER.toString();
     }
 
     public Long getId() {
@@ -91,22 +91,6 @@ public class UserDTO {
         this.email = email;
     }
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public void setWeight(Float weight) {
-        this.weight = weight;
-    }
-
-    public void setHeight(Float height) {
-        this.height = height;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -131,19 +115,12 @@ public class UserDTO {
         return lastName;
     }
 
-    public LocalDate getDob() {
-        return dob;
+    public Boolean getDeleted() {
+        return isDeleted;
     }
 
-    public String getSex() {
-        return sex;
-    }
-
-    public Float getWeight() {
-        return weight;
-    }
-
-    public Float getHeight() {
-        return height;
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
+

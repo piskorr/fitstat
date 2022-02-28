@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.fitstat.dtos.UserDTO;
@@ -36,7 +35,13 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/all")
     public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsersAndMap());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsersList());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/users/{id}")
+    public ResponseEntity<?> switchUsersBanStatus(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.switchUsersBanStatus(id));
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.POST,

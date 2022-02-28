@@ -15,7 +15,7 @@ public class ActivityDTO {
     private String name;
 
     @NotEmpty
-    @Size(max = 15, message = "activity description cannot be longer than 255 characters")
+    @Size(max = 255, message = "activity description cannot be longer than 255 characters")
     private String description;
 
     @NotNull
@@ -34,7 +34,6 @@ public class ActivityDTO {
         this.description = activityEntity.getDescription();;
         this.MET = activityEntity.getMET();
         this.isDeleted = activityEntity.isDeleted();
-
     }
 
     public Long getId() {

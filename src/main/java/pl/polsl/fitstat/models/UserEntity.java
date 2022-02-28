@@ -94,16 +94,13 @@ public class UserEntity {
         this.isDeleted = false;
     }
 
+
+
     public UserEntity(UserDTO userDTO) {
         this.email = userDTO.getEmail();
         this.username = userDTO.getUsername();
-        //this.password = userDTO.getPassword();
         this.firstName = userDTO.getFirstName();
         this.lastName = userDTO.getLastName();
-        this.height = userDTO.getHeight();
-        this.weight = userDTO.getWeight();
-        this.dob = userDTO.getDob();
-        this.sex = userDTO.getSex() != null ? userDTO.getSex().equals("female") : null;
         this.isDeleted = false;
     }
 

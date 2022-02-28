@@ -168,11 +168,11 @@ public class KeycloakService {
         userResource.roles().realmLevel().add(role);
     }
 
-    public void disableUser(String username) {
+    public void setUserStatus(String username, boolean enabled) {
         String userId = getUserIdByUsername(username);
         UserResource userResource = getUserResource(userId);
         UserRepresentation updatedUser = userResource.toRepresentation();
-        updatedUser.setEnabled(false);
+        updatedUser.setEnabled(enabled);
         userResource.update(updatedUser);
     }
 

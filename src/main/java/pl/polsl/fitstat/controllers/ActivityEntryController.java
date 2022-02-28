@@ -47,17 +47,20 @@ public class ActivityEntryController {
 
     @GetMapping("activities/{activityId}/entries")
     public ResponseEntity<?> getAllCurrentUsersActivityEntriesByActivityId(@PathVariable long activityId) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllCurrentUsersActivityEntriesByActivityId(activityId));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.getAllCurrentUsersActivityEntriesByActivityId(activityId));
     }
 
     @PostMapping("activities/{activityId}/entries")
     public ResponseEntity<?> addActivityEntryToCurrentUser(@PathVariable long activityId, @RequestBody ActivityEntryDTO activityEntryDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.addActivityEntryToCurrentUser(activityId, activityEntryDTO));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.addActivityEntryToCurrentUser(activityId, activityEntryDTO));
     }
 
     @PatchMapping("entries/{entryId}")
     public ResponseEntity<?> updateActivityEntryById(@PathVariable long entryId, @RequestBody ActivityEntryDTO activityEntryDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.updateActivityEntryById(entryId, activityEntryDTO));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.updateActivityEntryById(entryId, activityEntryDTO));
     }
 
     @DeleteMapping("entries/{entryId}")

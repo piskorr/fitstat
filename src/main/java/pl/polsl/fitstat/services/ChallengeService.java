@@ -25,6 +25,7 @@ public class ChallengeService {
 
     public ChallengeEntity getChallengeById(long challengeId) {
         return repository.findById(challengeId)
+                .filter(challengeEntity -> !challengeEntity.isDeleted())
                 .orElseThrow(() -> new ResourceNotFoundException("Challenge with id: " + challengeId + " does not exist!"));
     }
 
@@ -39,6 +40,7 @@ public class ChallengeService {
     public List<ChallengeDTO> getAllChallengesAndMap() {
         return repository.findAll()
                 .stream()
+                .filter(challengeEntity -> !challengeEntity.isDeleted())
                 .map(ChallengeDTO::new)
                 .collect(Collectors.toList());
     }
@@ -72,9 +74,10 @@ public class ChallengeService {
         }
     }
 
-    public void deleteChallengeById(long challengeId){
+    public void deleteChallengeById(long challengeId) {
         ChallengeEntity challengeEntity = getChallengeById(challengeId);
-        repository.delete(challengeEntity);
+        challengeEntity.setDeleted(true);
+        repository.save(challengeEntity);
     }
 
 }
