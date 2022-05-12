@@ -14,5 +14,5 @@ Project is created with:
 	
 ## Architecture
 
-![diagram](diagram_komponentow.png)
+![diagram](diagram_komponentów.png)
 
