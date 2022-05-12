@@ -12,11 +12,7 @@ Project is created with:
 * MySQL
 * Keycloak
 	
-## Setup
-To run this project, install it locally using npm:
+## Architecture
 
-```
-$ cd ../lorem
-$ npm install
-$ npm start
-```
+![diagram](diagram_komponentow.png)
+
